@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_admin
 from app.core.database import get_db
 from app.models.user import User
-from app.schemas.product import ProductCreate, ProductRead
+from app.schemas.product import ProductCreate, ProductRead, ProductUpdate
 from app.services import product_service
 
 router = APIRouter(prefix="/products", tags=["products"])
@@ -25,3 +25,23 @@ def create_product(
     _admin: User = Depends(require_admin),
 ):
     return product_service.create_product(db, data)
+
+
+@router.patch("/{product_id}", response_model=ProductRead)
+def update_product(
+    product_id: int,
+    data: ProductUpdate,
+    db: Session = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    return product_service.update_product(db, product_id, data)
+
+
+@router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_product(
+    product_id: int,
+    db: Session = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    product_service.delete_product(db, product_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

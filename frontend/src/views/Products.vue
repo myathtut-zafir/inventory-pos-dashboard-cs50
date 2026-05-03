@@ -2,11 +2,16 @@
 import { ref, onMounted } from 'vue'
 import { productsService } from '../services/products'
 import ProductCreateModal from '../components/products/ProductCreateModal.vue'
+import ProductEditModal from '../components/products/ProductEditModal.vue'
+import { useToast } from 'primevue/usetoast'
 
 const products = ref([])
 const isLoading = ref(true)
 const error = ref(null)
 const showCreateModal = ref(false)
+const showEditModal = ref(false)
+const selectedProduct = ref(null)
+const toast = useToast()
 
 const fetchProducts = async () => {
   isLoading.value = true
@@ -25,6 +30,23 @@ const fetchProducts = async () => {
 
 const handleProductCreated = () => {
   fetchProducts() // Refresh list after creation
+}
+
+const openEditModal = (product) => {
+  selectedProduct.value = product
+  showEditModal.value = true
+}
+
+const confirmDelete = async (id) => {
+  if (window.confirm("Are you sure you want to delete this product?")) {
+    try {
+      await productsService.deleteProduct(id)
+      toast.add({ severity: 'success', summary: 'Success', detail: 'Product deleted', life: 3000 })
+      fetchProducts()
+    } catch (err) {
+      toast.add({ severity: 'error', summary: 'Error', detail: 'Could not delete product', life: 5000 })
+    }
+  }
 }
 
 onMounted(() => {
@@ -83,8 +105,8 @@ onMounted(() => {
             </td>
             <td class="font-semibold">${{ Number(product.price).toFixed(2) }}</td>
             <td class="text-right">
-              <button class="action-btn"><i class="pi pi-pencil"></i></button>
-              <button class="action-btn danger"><i class="pi pi-trash"></i></button>
+              <button class="action-btn" @click="openEditModal(product)"><i class="pi pi-pencil"></i></button>
+              <button class="action-btn danger" @click="confirmDelete(product.id)"><i class="pi pi-trash"></i></button>
             </td>
           </tr>
         </tbody>
@@ -95,6 +117,13 @@ onMounted(() => {
       v-if="showCreateModal" 
       @close="showCreateModal = false" 
       @created="handleProductCreated"
+    />
+
+    <ProductEditModal 
+      v-if="showEditModal" 
+      :product="selectedProduct"
+      @close="showEditModal = false" 
+      @updated="fetchProducts"
     />
   </div>
 </template>
