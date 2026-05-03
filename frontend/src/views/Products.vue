@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { productsService } from '../services/products'
+import ProductCreateModal from '../components/products/ProductCreateModal.vue'
 
 const products = ref([])
 const isLoading = ref(true)
 const error = ref(null)
+const showCreateModal = ref(false)
 
 const fetchProducts = async () => {
   isLoading.value = true
@@ -21,6 +23,10 @@ const fetchProducts = async () => {
   }
 }
 
+const handleProductCreated = () => {
+  fetchProducts() // Refresh list after creation
+}
+
 onMounted(() => {
   fetchProducts()
 })
@@ -29,7 +35,7 @@ onMounted(() => {
   <div class="page">
     <header class="page-header">
       <h1>Products</h1>
-      <button class="btn-primary">
+      <button class="btn-primary" @click="showCreateModal = true">
         <i class="pi pi-plus"></i> Add Product
       </button>
     </header>
@@ -53,15 +59,43 @@ onMounted(() => {
       <p>You haven't added any products to your inventory yet.</p>
     </div>
 
-    <div v-else class="page-content products-grid">
-      <div v-for="product in products" :key="product.id || product" class="product-card">
-         <div class="product-info">
-           <h3>{{ product.name || 'Unnamed Product' }}</h3>
-           <p class="sku">{{ product.sku || 'No SKU' }}</p>
-         </div>
-         <p class="price">{{ product.price ? '$' + product.price : 'N/A' }}</p>
-      </div>
+    <div v-else class="page-content table-container">
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>SKU</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="product in products" :key="product.id">
+            <td class="text-muted">#{{ product.id }}</td>
+            <td class="font-medium">{{ product.name }}</td>
+            <td class="text-muted">{{ product.sku }}</td>
+            <td>
+              <span class="quantity-badge" :class="{'low-stock': product.stock_quantity < 10}">
+                {{ product.stock_quantity }}
+              </span>
+            </td>
+            <td class="font-semibold">${{ Number(product.price).toFixed(2) }}</td>
+            <td class="text-right">
+              <button class="action-btn"><i class="pi pi-pencil"></i></button>
+              <button class="action-btn danger"><i class="pi pi-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+    <ProductCreateModal 
+      v-if="showCreateModal" 
+      @close="showCreateModal = false" 
+      @created="handleProductCreated"
+    />
   </div>
 </template>
 <style scoped>
@@ -160,39 +194,67 @@ onMounted(() => {
 }
 .error-state p { color: #ef4444; }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-  padding: 2rem;
-  background: transparent;
-  box-shadow: none;
-  align-items: flex-start;
-  align-content: flex-start;
+.table-container {
+  overflow-x: auto;
+  padding: 0;
 }
-.product-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
 }
-.product-info h3 {
-  margin: 0 0 0.25rem 0;
-  color: #1f2937;
-  font-size: 1.1rem;
+.products-table th,
+.products-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
 }
-.product-info .sku {
-  margin: 0;
+.products-table th {
+  background-color: #f9fafb;
+  color: #6b7280;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+.products-table tbody tr {
+  transition: background-color 0.2s;
+}
+.products-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+.text-muted { color: #6b7280; }
+.font-medium { font-weight: 500; color: #111827; }
+.font-semibold { font-weight: 600; color: #111827; }
+.text-right { text-align: right; }
+.quantity-badge {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.quantity-badge.low-stock {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+.action-btn {
+  background: none;
+  border: none;
   color: #9ca3af;
-  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
 }
-.price {
-  font-weight: 700;
-  color: #10b981;
-  font-size: 1.25rem;
-  margin: 0;
+.action-btn:hover {
+  color: #3b82f6;
+  background-color: #eff6ff;
+}
+.action-btn.danger:hover {
+  color: #ef4444;
+  background-color: #fef2f2;
 }
 </style>

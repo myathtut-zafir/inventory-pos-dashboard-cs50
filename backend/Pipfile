@@ -9,6 +9,7 @@ sqlalchemy = "*"
 psycopg2-binary = "*"
 alembic = "*"
 pydantic-settings = "*"
+bcrypt = "*"
 
 [dev-packages]
 

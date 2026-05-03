@@ -1,8 +1,10 @@
 <script setup>
 import MainLayout from './components/layout/MainLayout.vue'
+import Toast from 'primevue/toast'
 </script>
 
 <template>
+  <Toast />
   <MainLayout />
 </template>
 
