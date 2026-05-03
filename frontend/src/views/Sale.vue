@@ -1,13 +1,20 @@
 <script setup>
+import { ref } from 'vue'
+import SaleCreateModal from '../components/sales/SaleCreateModal.vue'
+
+const showCreateModal = ref(false)
+
+const handleSaleCreated = () => {
+  // In the future: refresh sales list here
+}
 </script>
 <template>
   <div class="page">
     <header class="page-header">
       <h1>Point of Sale</h1>
-      <div class="status-badge">
-        <span class="dot"></span>
-        Terminal Active
-      </div>
+      <button class="btn-primary" @click="showCreateModal = true">
+        <i class="pi pi-plus"></i> Create Sale Invoice
+      </button>
     </header>
     <div class="page-content empty-state">
       <div class="icon-wrapper">
@@ -16,6 +23,12 @@
       <h2>Ready for Sales</h2>
       <p>Scan a barcode or search for products to start a new transaction.</p>
     </div>
+
+    <SaleCreateModal 
+      v-if="showCreateModal" 
+      @close="showCreateModal = false" 
+      @created="handleSaleCreated"
+    />
   </div>
 </template>
 <style scoped>
@@ -36,28 +49,27 @@
   margin: 0;
   font-weight: 700;
 }
-.status-badge {
+.btn-primary {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #dcfce7;
-  color: #166534;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
+  background-color: #9333ea;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 4px 6px rgba(147, 51, 234, 0.2);
 }
-.dot {
-  width: 8px;
-  height: 8px;
-  background-color: #22c55e;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
+.btn-primary:hover {
+  background-color: #7e22ce;
+  transform: translateY(-1px);
 }
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-  70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+.btn-primary:active {
+  transform: translateY(1px);
 }
 .empty-state {
   display: flex;
