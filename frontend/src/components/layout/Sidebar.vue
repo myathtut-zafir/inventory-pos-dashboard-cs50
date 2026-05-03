@@ -1,4 +1,7 @@
 <script setup>
+import { useAuth } from '../../composables/useAuth'
+
+const auth = useAuth()
 </script>
 
 <template>
@@ -13,13 +16,18 @@
       <router-link to="/products" class="menu-item" active-class="active">
         <i class="pi pi-box"></i> Products
       </router-link>
-      <router-link to="/users" class="menu-item" active-class="active">
+      <router-link v-if="auth.getUserRole.value === 'admin'" to="/users" class="menu-item" active-class="active">
         <i class="pi pi-users"></i> Users
       </router-link>
       <router-link to="/sale" class="menu-item" active-class="active">
         <i class="pi pi-shopping-cart"></i> Sale
       </router-link>
     </nav>
+    <div class="sidebar-footer">
+      <button class="menu-item logout-btn" @click="auth.logout()">
+        <i class="pi pi-sign-out"></i> Logout
+      </button>
+    </div>
   </aside>
 </template>
 
@@ -64,14 +72,34 @@
   font-size: 1.05rem;
 }
 .menu-item:hover {
-  background-color: rgba(59, 130, 246, 0.1);
-  color: #ffffff;
-  transform: translateX(5px);
+  transition: background-color 0.2s, color 0.2s;
+  text-decoration: none;
 }
+
+.menu-item:hover,
 .menu-item.active {
-  background-color: #3b82f6;
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  background-color: #1f2937;
+  color: white;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  margin-top: auto;
+}
+
+.logout-btn:hover {
+  background-color: #ef4444; /* Red hover for logout */
+  color: white;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  border-top: 1px solid #374151;
+  padding-top: 1rem;
 }
 .menu-item i {
   font-size: 1.25rem;
