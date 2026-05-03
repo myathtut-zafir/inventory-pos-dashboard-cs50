@@ -26,6 +26,10 @@ const fetchProducts = async () => {
   }
 }
 
+const isProductSelected = (productId, currentIndex) => {
+  return items.value.some((item, index) => index !== currentIndex && item.product_id === productId)
+}
+
 const addItem = () => {
   items.value.push({ product_id: '', quantity: 1 })
 }
@@ -92,7 +96,9 @@ onMounted(() => {
               <label>Product <span class="required">*</span></label>
               <select v-model="item.product_id" required>
                 <option value="" disabled>Select a product...</option>
-                <option v-for="product in products" :key="product.id" :value="product.id">
+                <option v-for="product in products" :key="product.id" :value="product.id"
+                        :disabled="isProductSelected(product.id, index)"
+                        :hidden="isProductSelected(product.id, index)">
                   {{ product.name }} (Stock: {{ product.stock_quantity }}) - ${{ Number(product.price).toFixed(2) }}
                 </option>
               </select>
