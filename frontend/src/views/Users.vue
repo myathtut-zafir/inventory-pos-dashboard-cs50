@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { usersService } from '../services/users'
+import UserCreateModal from '../components/users/UserCreateModal.vue'
 
 const users = ref([])
 const isLoading = ref(true)
 const error = ref(null)
+const showCreateModal = ref(false)
 
 const fetchUsers = async () => {
   isLoading.value = true
@@ -41,7 +43,7 @@ onMounted(() => {
   <div class="page">
     <header class="page-header">
       <h1>Users</h1>
-      <button class="btn-primary">
+      <button class="btn-primary" @click="showCreateModal = true">
         <i class="pi pi-plus"></i> Add User
       </button>
     </header>
@@ -94,6 +96,12 @@ onMounted(() => {
         </tbody>
       </table>
     </div>
+
+    <UserCreateModal 
+      v-if="showCreateModal" 
+      @close="showCreateModal = false" 
+      @created="fetchUsers"
+    />
   </div>
 </template>
 
