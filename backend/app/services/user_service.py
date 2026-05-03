@@ -5,13 +5,24 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.core.security import hash_password
+from app.core.security import hash_password, verify_password
 from app.models.user import User
 from app.schemas.user import UserRegister
 
 
 def list_users(db: Session) -> Sequence[User]:
     return db.scalars(select(User).order_by(User.id)).all()
+
+
+def get_user_by_id(db: Session, user_id: int) -> User | None:
+    return db.scalar(select(User).where(User.id == user_id))
+
+
+def authenticate(db: Session, username: str, password: str) -> User | None:
+    user = db.scalar(select(User).where(User.username == username.strip().lower()))
+    if not user or not verify_password(password, user.password_hash):
+        return None
+    return user
 
 
 def register_user(db: Session, data: UserRegister) -> User:

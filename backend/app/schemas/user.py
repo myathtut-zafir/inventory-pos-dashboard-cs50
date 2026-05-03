@@ -22,16 +22,6 @@ class UserRegister(BaseModel):
             )
         return v
 
-    @field_validator("password")
-    @classmethod
-    def _check_password_strength(cls, v: str) -> str:
-        if not any(c.isalpha() for c in v):
-            raise ValueError("Password must contain at least one letter")
-        if not any(c.isdigit() for c in v):
-            raise ValueError("Password must contain at least one digit")
-        return v
-
-
 class UserRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
