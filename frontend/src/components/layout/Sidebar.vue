@@ -13,6 +13,9 @@
       <router-link to="/products" class="menu-item" active-class="active">
         <i class="pi pi-box"></i> Products
       </router-link>
+      <router-link to="/users" class="menu-item" active-class="active">
+        <i class="pi pi-users"></i> Users
+      </router-link>
       <router-link to="/sale" class="menu-item" active-class="active">
         <i class="pi pi-shopping-cart"></i> Sale
       </router-link>

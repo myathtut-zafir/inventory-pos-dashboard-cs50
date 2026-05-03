@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
@@ -6,6 +8,10 @@ from sqlalchemy.orm import Session
 from app.core.security import hash_password
 from app.models.user import User
 from app.schemas.user import UserRegister
+
+
+def list_users(db: Session) -> Sequence[User]:
+    return db.scalars(select(User).order_by(User.id)).all()
 
 
 def register_user(db: Session, data: UserRegister) -> User:
