@@ -20,6 +20,7 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "Inventory Dashboard API"
     API_V1_PREFIX: str = "/api/v1"
+    CORS_ORIGINS: list[str] = ["http://localhost:5173"]
 
     @computed_field  # type: ignore[misc]
     @property
