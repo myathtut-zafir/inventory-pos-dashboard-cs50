@@ -1,4 +1,6 @@
 <script setup>
+import { ref, onMounted } from 'vue'
+import { dashboardService } from '../services/dashboard'
 import {
   Chart as ChartJS,
   Title,
@@ -72,6 +74,25 @@ const pieOptions = {
     }
   }
 }
+
+const summary = ref({
+  total_sale_amount: 0,
+  total_sale_quantity: 0,
+  total_products: 0
+})
+
+const fetchSummary = async () => {
+  try {
+    const res = await dashboardService.getSummary()
+    summary.value = res.data || res || summary.value
+  } catch (error) {
+    console.error("Failed to fetch dashboard summary", error)
+  }
+}
+
+onMounted(() => {
+  fetchSummary()
+})
 </script>
 
 <template>
@@ -87,7 +108,7 @@ const pieOptions = {
       <div class="stat-card">
         <div class="stat-info">
           <h3>Total Sales</h3>
-          <p class="value">$12,450</p>
+          <p class="value">${{ Number(summary.total_sale_amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</p>
         </div>
         <div class="stat-icon bg-blue">
           <i class="pi pi-dollar"></i>
@@ -96,7 +117,7 @@ const pieOptions = {
       <div class="stat-card">
         <div class="stat-info">
           <h3>Total Orders</h3>
-          <p class="value">150</p>
+          <p class="value">{{ summary.total_sale_quantity || 0 }}</p>
         </div>
         <div class="stat-icon bg-green">
           <i class="pi pi-shopping-cart"></i>
@@ -104,8 +125,8 @@ const pieOptions = {
       </div>
       <div class="stat-card">
         <div class="stat-info">
-          <h3>Products Sold</h3>
-          <p class="value">345</p>
+          <h3>Total Products</h3>
+          <p class="value">{{ summary.total_products || 0 }}</p>
         </div>
         <div class="stat-icon bg-orange">
           <i class="pi pi-box"></i>
