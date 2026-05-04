@@ -30,7 +30,7 @@ const handleLogin = async () => {
     <div class="login-card">
       <div class="login-header">
         <i class="pi pi-box logo"></i>
-        <h1>Inventory POS</h1>
+        <h1> CS50 POS</h1>
         <p>Sign in to access your dashboard</p>
       </div>
       

@@ -75,7 +75,6 @@ onMounted(() => {
             <th>Username</th>
             <th>Role</th>
             <th>Created At</th>
-            <th class="text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -88,10 +87,6 @@ onMounted(() => {
               </span>
             </td>
             <td class="text-muted">{{ formatDate(user.created_at) }}</td>
-            <td class="text-right">
-              <button class="action-btn"><i class="pi pi-pencil"></i></button>
-              <button class="action-btn danger"><i class="pi pi-trash"></i></button>
-            </td>
           </tr>
         </tbody>
       </table>

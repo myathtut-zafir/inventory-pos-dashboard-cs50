@@ -7,7 +7,7 @@ const auth = useAuth()
 <template>
   <aside class="sidebar">
     <div class="logo">
-      <h2>POS System</h2>
+      <h2>CS50 POS System</h2>
     </div>
     <nav class="menu">
       <router-link to="/" class="menu-item" active-class="active">

@@ -15,17 +15,17 @@ import { Bar, Pie } from 'vue-chartjs'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
 
-const barData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+const barData = ref({
+  labels: [],
   datasets: [
     {
-      label: 'Monthly Sales ($)',
+      label: 'Monthly Orders',
       backgroundColor: '#3b82f6',
       borderRadius: 6,
-      data: [1200, 1900, 1500, 2200, 1800, 2800]
+      data: []
     }
   ]
-}
+})
 
 const barOptions = {
   responsive: true,
@@ -50,16 +50,16 @@ const barOptions = {
   }
 }
 
-const pieData = {
-  labels: ['Electronics', 'Clothing', 'Groceries', 'Books'],
+const pieData = ref({
+  labels: [],
   datasets: [
     {
       backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'],
       borderWidth: 0,
-      data: [45, 25, 20, 10]
+      data: []
     }
   ]
-}
+})
 
 const pieOptions = {
   responsive: true,
@@ -90,8 +90,56 @@ const fetchSummary = async () => {
   }
 }
 
+const fetchSalesByMonth = async () => {
+  try {
+    const res = await dashboardService.getSalesByMonth()
+    const data = res.data || res || []
+    
+    barData.value = {
+      labels: data.map(item => {
+        // Format 'YYYY-MM' to 'ShortMonth YYYY' (e.g. Jan 2026)
+        const [year, month] = item.month.split('-')
+        const date = new Date(year, month - 1)
+        return date.toLocaleString('default', { month: 'short', year: 'numeric' })
+      }),
+      datasets: [
+        {
+          label: 'Monthly Orders',
+          backgroundColor: '#3b82f6',
+          borderRadius: 6,
+          data: data.map(item => item.count)
+        }
+      ]
+    }
+  } catch (error) {
+    console.error("Failed to fetch sales by month", error)
+  }
+}
+
+const fetchUsersByRole = async () => {
+  try {
+    const res = await dashboardService.getUsersByRole()
+    const data = res.data || res || []
+    
+    pieData.value = {
+      labels: data.map(item => item.role.charAt(0).toUpperCase() + item.role.slice(1)),
+      datasets: [
+        {
+          backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'],
+          borderWidth: 0,
+          data: data.map(item => item.count)
+        }
+      ]
+    }
+  } catch (error) {
+    console.error("Failed to fetch users by role", error)
+  }
+}
+
 onMounted(() => {
   fetchSummary()
+  fetchSalesByMonth()
+  fetchUsersByRole()
 })
 </script>
 
@@ -116,7 +164,7 @@ onMounted(() => {
       </div>
       <div class="stat-card">
         <div class="stat-info">
-          <h3>Total Orders</h3>
+          <h3>Total Sale Quantity</h3>
           <p class="value">{{ summary.total_sale_quantity || 0 }}</p>
         </div>
         <div class="stat-icon bg-green">
@@ -142,7 +190,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="chart-card">
-        <h3>Sales by Category</h3>
+        <h3>Users by Role</h3>
         <div class="chart-container">
           <Pie :data="pieData" :options="pieOptions" />
         </div>
