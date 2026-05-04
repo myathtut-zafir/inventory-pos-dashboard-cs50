@@ -60,18 +60,18 @@ How the rules are enforced:
 ## Screenshots
 
 ### Login
-![Login page](docs/screenshots/login.png)
+![Login page](docs/screenshots/4.jpg)
 
 ### Dashboard — KPIs, monthly bar chart, role donut chart
-![Dashboard](docs/screenshots/dashboard.png)
+![Dashboard](docs/screenshots/1.jpg)
 
 ### Products — admin-only catalog management
-![Products list](docs/screenshots/products.png)
-![Add product modal](docs/screenshots/product-create.png)
+![Products list](docs/screenshots/5.jpg)
+![Add product modal](docs/screenshots/6.jpg)
 
 ### Point of Sale — staff cashier workflow
-![Sales list](docs/screenshots/sale-list.png)
-![Create sale invoice modal](docs/screenshots/sale-create.png)
+![Sales list](docs/screenshots/2.jpg)
+![Create sale invoice modal](docs/screenshots/3.jpg)
 
 ---
 
