@@ -13,13 +13,13 @@ const auth = useAuth()
       <router-link to="/" class="menu-item" active-class="active">
         <i class="pi pi-home"></i> Dashboard
       </router-link>
-      <router-link to="/products" class="menu-item" active-class="active">
+      <router-link v-if="auth.getUserRole.value !== 'staff'" to="/products" class="menu-item" active-class="active">
         <i class="pi pi-box"></i> Products
       </router-link>
       <router-link v-if="auth.getUserRole.value === 'admin'" to="/users" class="menu-item" active-class="active">
         <i class="pi pi-users"></i> Users
       </router-link>
-      <router-link to="/sale" class="menu-item" active-class="active">
+      <router-link v-if="auth.getUserRole.value !== 'admin'" to="/sale" class="menu-item" active-class="active">
         <i class="pi pi-shopping-cart"></i> Sale
       </router-link>
     </nav>
