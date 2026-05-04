@@ -57,6 +57,24 @@ How the rules are enforced:
 
 ---
 
+## Screenshots
+
+### Login
+![Login page](docs/screenshots/login.png)
+
+### Dashboard — KPIs, monthly bar chart, role donut chart
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Products — admin-only catalog management
+![Products list](docs/screenshots/products.png)
+![Add product modal](docs/screenshots/product-create.png)
+
+### Point of Sale — staff cashier workflow
+![Sales list](docs/screenshots/sale-list.png)
+![Create sale invoice modal](docs/screenshots/sale-create.png)
+
+---
+
 ## Tech Stack
 
 | Layer | Technology |
@@ -102,31 +120,34 @@ inventory-dashboard-cs50/
 │       ├── schemas/                # Pydantic request/response schemas
 │       └── services/               # Business logic — DB access lives here
 │
-└── frontend/
-    ├── package.json
-    ├── vite.config.js
-    └── src/
-        ├── main.js                 # Vue app bootstrap, PrimeVue, router
-        ├── App.vue
-        ├── router/index.js         # Routes + auth guard
-        ├── composables/useAuth.js  # Reactive auth state
-        ├── services/               # API client (api.js + per-resource modules)
-        │   ├── api.js              # Base fetch wrapper with auth header injection
-        │   ├── products.js
-        │   ├── sales.js
-        │   ├── users.js
-        │   └── dashboard.js
-        ├── views/                  # Page components
-        │   ├── Login.vue
-        │   ├── Dashboard.vue       # KPIs + bar chart + donut chart
-        │   ├── Products.vue        # CRUD table
-        │   ├── Sale.vue            # Cart + checkout
-        │   └── Users.vue           # Admin-only user list
-        └── components/
-            ├── layout/             # Sidebar + main shell
-            ├── products/           # Product create/edit modals
-            ├── sales/              # Sale checkout modal
-            └── users/              # User create modal
+├── frontend/
+│   ├── package.json
+│   ├── vite.config.js
+│   └── src/
+│       ├── main.js                 # Vue app bootstrap, PrimeVue, router
+│       ├── App.vue
+│       ├── router/index.js         # Routes + auth guard
+│       ├── composables/useAuth.js  # Reactive auth state
+│       ├── services/               # API client (api.js + per-resource modules)
+│       │   ├── api.js              # Base fetch wrapper with auth header injection
+│       │   ├── products.js
+│       │   ├── sales.js
+│       │   ├── users.js
+│       │   └── dashboard.js
+│       ├── views/                  # Page components
+│       │   ├── Login.vue
+│       │   ├── Dashboard.vue       # KPIs + bar chart + donut chart
+│       │   ├── Products.vue        # CRUD table
+│       │   ├── Sale.vue            # Cart + checkout
+│       │   └── Users.vue           # Admin-only user list
+│       └── components/
+│           ├── layout/             # Sidebar + main shell
+│           ├── products/           # Product create/edit modals
+│           ├── sales/              # Sale checkout modal
+│           └── users/              # User create modal
+│
+└── docs/
+    └── screenshots/                # README images
 ```
 
 ### Why this layout
