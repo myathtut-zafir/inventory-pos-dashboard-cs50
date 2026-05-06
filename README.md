@@ -2,7 +2,7 @@
 
 A full-stack **Point-of-Sale (POS)** application built as my final project for **CS50x**. The system lets a small retail shop ring up customer sales, manage the product catalog, track stock as items are sold, and review business performance through a dashboard with charts.
 
-#### Video Demo: <URL HERE>
+#### Video Demo: <https://www.youtube.com/watch?v=4NMnS_sv6wk&t=5s>
 
 ---
 
